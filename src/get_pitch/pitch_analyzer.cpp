@@ -11,7 +11,10 @@ namespace upc {
   void PitchAnalyzer::autocorrelation(const vector<float> &x, vector<float> &r) const {
 
     for (unsigned int l = 0; l < r.size(); ++l) {
-  		/// \TODO Compute the autocorrelation r[l]
+      for (unsigned int n = 0; n < x.size() - l; ++n) {
+        r[l] += x[n] * x[n + l];
+      }
+      r[l] /= x.size();
     }
 
     if (r[0] == 0.0F) //to avoid log() and divide zero 
@@ -47,9 +50,13 @@ namespace upc {
   }
 
   bool PitchAnalyzer::unvoiced(float pot, float r1norm, float rmaxnorm) const {
-    /// \TODO Implement a rule to decide whether the sound is voiced or not.
-    /// * You can use the standard features (pot, r1norm, rmaxnorm),
-    ///   or compute and use other ones.
+    int c=0;
+    if(rmaxnorm>RMAX_THRSHLD) c++;
+    if(r1norm>R1_THRSHLD) c++;
+    if(pot>POT_THRSHLD) c++;
+    if(c>2){
+      return false;   
+    }
     return true;
   }
 
@@ -76,9 +83,13 @@ namespace upc {
     ///	   .
 	/// In either case, the lag should not exceed that of the minimum value of the pitch.
 
-    unsigned int lag = iRMax - r.begin();
+  iRMax = r.begin() + npitch_min;
+  for (iR = r.begin() + npitch_min; iR < r.begin() + npitch_max; iR++) {
+    if (*iR > *iRMax) iRMax = iR;
+  }
+  unsigned int lag = iRMax - r.begin();
 
-    float pot = 10 * log10(r[0]);
+  float pot = 10 * log10(r[0]);
 
     //You can print these (and other) features, look at them using wavesurfer
     //Based on that, implement a rule for unvoiced
