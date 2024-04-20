@@ -80,6 +80,8 @@ Ejercicios básicos
 		(r[0]), la autocorrelación normalizada de uno (r1norm = r[1] / r[0]) y el valor de la
 		autocorrelación en su máximo secundario (rmaxnorm = r[lag] / r[0]).
 
+    ![Voiced Candidates](img/voicede_candidates.png)
+
 		Puede considerar, también, la conveniencia de usar la tasa de cruces por cero.
 
 	    Recuerde configurar los paneles de datos para que el desplazamiento de ventana sea el adecuado, que
@@ -88,6 +90,8 @@ Ejercicios básicos
       - Use el estimador de pitch implementado en el programa `wavesurfer` en una señal de prueba y compare
 	    su resultado con el obtenido por la mejor versión de su propio sistema.  Inserte una gráfica
 		ilustrativa del resultado de ambos estimadores.
+
+    ![alt text](img/pitch_estimation.png)
      
 		Aunque puede usar el propio Wavesurfer para obtener la representación, se valorará
 	 	el uso de alternativas de mayor calidad (particularmente Python).
