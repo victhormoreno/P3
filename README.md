@@ -119,7 +119,29 @@ Ejercicios de ampliación
   Entre las posibles mejoras, puede escoger una o más de las siguientes:
 
   * Técnicas de preprocesado: filtrado paso bajo, diezmado, *center clipping*, etc.
+      ```cpp
+        for(unsigned int i=0; i<x.size(); i++){
+          if(abs(x[i])<CENTER_CLIP_THRESHOLD){
+            x[i]=0;
+          }
+        }
+      ```
+      - CENTER_CLIP_THRESHOLD = 0.01
+
   * Técnicas de postprocesado: filtro de mediana, *dynamic time warping*, etc.
+    ```cpp
+        vector<float> vect;
+        vector<float> filtered_f0(f0.size());
+        filtered_f0[0] = f0[0];
+        for (unsigned int i = 1; i < f0.size() - 1; i++) {
+          vect = {f0[i - 1], f0[i], f0[i + 1]};
+          sort(vect.begin(), vect.end());
+          filtered_f0[i] = vect[1];
+        }
+        filtered_f0[f0.size() - 1] = f0[f0.size() - 1];
+        f0 = filtered_f0;
+      ```
+
   * Métodos alternativos a la autocorrelación: procesado cepstral, *average magnitude difference function*
     (AMDF), etc.
   * Optimización **demostrable** de los parámetros que gobiernan el estimador, en concreto, de los que

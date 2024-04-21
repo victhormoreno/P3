@@ -14,6 +14,8 @@ namespace upc {
   const float R1_THRSHLD = 0.7;
   const float POT_THRSHLD = -40;
 
+  const float CENTER_CLIP_THRESHOLD = 0.01;
+
   ///
   /// PitchAnalyzer: class that computes the pitch (in Hz) from a signal frame.
   /// No pre-processing or post-processing has been included

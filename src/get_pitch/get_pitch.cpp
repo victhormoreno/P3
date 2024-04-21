@@ -61,9 +61,12 @@ int main(int argc, const char *argv[]) {
   // Define analyzer
   PitchAnalyzer analyzer(n_len, rate, PitchAnalyzer::RECT, 50, 500);
 
-  /// \TODO
-  /// Preprocess the input signal in order to ease pitch estimation. For instance,
-  /// central-clipping or low pass filtering may be used.
+  // Preprocess the input signal
+  for(unsigned int i=0; i<x.size(); i++){
+    if(abs(x[i])<CENTER_CLIP_THRESHOLD){
+      x[i]=0;
+    }
+  }
   
   // Iterate for each frame and save values in f0 vector
   vector<float>::iterator iX;
@@ -73,9 +76,17 @@ int main(int argc, const char *argv[]) {
     f0.push_back(f);
   }
 
-  /// \TODO
-  /// Postprocess the estimation in order to supress errors. For instance, a median filter
-  /// or time-warping may be used.
+  // Median Filter
+  vector<float> vect;
+  vector<float> filtered_f0(f0.size());
+  filtered_f0[0] = f0[0];
+  for (unsigned int i = 1; i < f0.size() - 1; i++) {
+    vect = {f0[i - 1], f0[i], f0[i + 1]};
+    sort(vect.begin(), vect.end());
+    filtered_f0[i] = vect[1];
+  }
+  filtered_f0[f0.size() - 1] = f0[f0.size() - 1];
+  f0 = filtered_f0;
 
   // Write f0 contour into the output file
   ofstream os(output_txt);
