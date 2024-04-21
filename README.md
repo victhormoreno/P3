@@ -113,6 +113,11 @@ Ejercicios de ampliación
   * Inserte un *pantallazo* en el que se vea el mensaje de ayuda del programa y un ejemplo de utilización
     con los argumentos añadidos.
 
+    ![Help message](img/docopt.png)
+    ```
+      get_pitch prueba.wav prueba.f0 --window RECT --rmax 0.1 --r1 0.2 --pow -10 --center 0.05
+    ```
+
 - Implemente las técnicas que considere oportunas para optimizar las prestaciones del sistema de estimación
   de pitch.
 

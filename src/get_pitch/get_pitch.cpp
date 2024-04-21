@@ -27,6 +27,11 @@ Usage:
 Options:
     -h, --help  Show this screen
     --version   Show the version of the project
+    --window <type>  Window type [default: RECT]
+    --rmax FLOAT   Rmax (r[max]/r[0]) threshold for voiced/unvoiced sound [default: 0.7]
+    --r1 FLOAT     R1 (r[1]/r[0]) threshold for voiced/unvoiced sound [default: 0.7]
+    --pow FLOAT    Power threshold for voiced/unvoiced [default: -40]
+    --center FLOAT Center clip threshold [default: 0.01]
 
 Arguments:
     input-wav   Wave file with the audio signal
@@ -36,9 +41,6 @@ Arguments:
 )";
 
 int main(int argc, const char *argv[]) {
-	/// \TODO 
-	///  Modify the program syntax and the call to **docopt()** in order to
-	///  add options and arguments to the program.
     std::map<std::string, docopt::value> args = docopt::docopt(USAGE,
         {argv + 1, argv + argc},	// array of arguments, without the program name
         true,    // show help if requested
@@ -46,6 +48,12 @@ int main(int argc, const char *argv[]) {
 
 	std::string input_wav = args["<input-wav>"].asString();
 	std::string output_txt = args["<output-txt>"].asString();
+  std::string window = args["--window"].asString();
+
+  float RMAX_THRSHLD = stof(args["--rmax"].asString());
+  float R1_THRSHLD = stof(args["--r1"].asString());
+  float POW_THRSHLD = stof(args["--pow"].asString());
+  float CENTER_CLIP_THRESHOLD = stof(args["--center"].asString());
 
   // Read input sound file
   unsigned int rate;
@@ -59,7 +67,16 @@ int main(int argc, const char *argv[]) {
   int n_shift = rate * FRAME_SHIFT;
 
   // Define analyzer
-  PitchAnalyzer analyzer(n_len, rate, PitchAnalyzer::RECT, 50, 500);
+  PitchAnalyzer::Window window_type;
+  if (window == "RECT") {
+    window_type = PitchAnalyzer::RECT;
+  } else if (window == "HAMMING") {
+    window_type = PitchAnalyzer::HAMMING;
+  } else {
+    cerr << "Invalid window type\n";
+    return -1;
+  }
+  PitchAnalyzer analyzer(n_len, rate, window_type, 50, 500, RMAX_THRSHLD, R1_THRSHLD, POW_THRSHLD);
 
   // Preprocess the input signal
   for(unsigned int i=0; i<x.size(); i++){

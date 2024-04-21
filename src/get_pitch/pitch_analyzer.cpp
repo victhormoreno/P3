@@ -29,7 +29,8 @@ namespace upc {
 
     switch (win_type) {
     case HAMMING:
-      /// \TODO Implement the Hamming window
+      for (unsigned int i=0; i<frameLen; ++i)
+        window[i] = 0.54 - 0.46*cos(2*M_PI*i/(frameLen-1));
       break;
     case RECT:
     default:
@@ -53,7 +54,7 @@ namespace upc {
     int c=0;
     if(rmaxnorm>RMAX_THRSHLD) c++;
     if(r1norm>R1_THRSHLD) c++;
-    if(pot>POT_THRSHLD) c++;
+    if(pot>POW_THRSHLD) c++;
     if(c>2){
       return false;   
     }
